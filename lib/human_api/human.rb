@@ -25,7 +25,9 @@ module HumanApi
 							:locations, 
 							:sleeps, 
 							:weight, 
-							:bmi
+							:bmi,
+              :sources,
+              :human
 							]
 
 		def initialize(options)
