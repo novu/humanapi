@@ -79,6 +79,16 @@ module HumanApi
 					url += "/#{options[:id]}"
 				end
 
+				if options[:updated_since].present?
+					updated_since = options[:updated_since]
+
+					if updated_since.class == 'Date'
+						updated_since = updated_since.strftime("%Y%m%dT%H%M%S%z")
+					end
+
+					url += "?updated_since=" + updated_since
+				end
+
 				# Make the request finally
 				result = get(url, :access_token => token)
 
