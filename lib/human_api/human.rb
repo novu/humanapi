@@ -66,6 +66,8 @@ module HumanApi
 				else
 					if options[:summary] == true
 						url += "/summary"
+					elsif options[:summaries] == true
+						url +/ "/summaries"
 					end
 				end
 
