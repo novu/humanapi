@@ -1,7 +1,5 @@
 
-# THE MODULE
 module HumanApi
-	# THE CLASS
 	class Human < Nestful::Resource
 
 		attr_reader :token
@@ -81,18 +79,11 @@ module HumanApi
 					url += "/#{options[:id]}"
 				end
 
-				if options[:updated_since].present?
-					updated_since = options[:updated_since]
-
-					if updated_since.class == 'Date'
-						updated_since = updated_since.strftime("%Y%m%dT%H%M%S%z")
-					end
-
-					url += "?updated_since=" + updated_since
-				end
+				params = query_params(options)
+				params[:access_token] = token
 
 				# Make the request finally
-				result = get(url, :access_token => token)
+				result = get(url, params)
 
 				# Converting to json the body string
 				JSON.parse(result.body)
@@ -100,8 +91,23 @@ module HumanApi
 				# Tell the developer the method is not there
 				"The method '#{method}' does not exist!"
 			end
-
 		end
 
+		private
+
+			def query_params(options)
+				params = {}
+
+				if options[:updated_since].present?
+					params[:updated_since] = options[:updated_since].strftime("%Y%m%dT%H%M%S%z")
+				end
+
+				if options[:start_date].present? && options[:end_date].present?
+					params[:start_date] = options[:start_date].strftime("%Y-%m-%d")
+					params[:end_date] = options[:end_date].strftime("%Y-%m-%d")
+				end
+
+				params
+			end
 	end
 end
